@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "start_kafka_broker": "docker run -d -p 9092:9092 --name broker apache/kafka:latest",
+    "start_kafka_broker": "docker run  --rm -d -p 9092:9092 --name broker apache/kafka:latest",
     "open_a_shell_in_the_broker_container": "docker exec --workdir /opt/kafka/bin/ -it broker sh"
   }
 }
