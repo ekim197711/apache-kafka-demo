@@ -1,4 +1,4 @@
-package com.example.apachekafkademo.kafkaservice;
+package com.example.apachekafkademo.kafkaservice.producer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.context.annotation.Bean;

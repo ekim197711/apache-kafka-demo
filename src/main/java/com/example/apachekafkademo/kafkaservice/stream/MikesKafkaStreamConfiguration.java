@@ -1,5 +1,6 @@
-package com.example.apachekafkademo.kafkaservice;
+package com.example.apachekafkademo.kafkaservice.stream;
 
+import com.example.apachekafkademo.kafkaservice.adminstuff.CreateTopicOnStartupService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -20,7 +21,7 @@ import static org.apache.kafka.streams.StreamsConfig.*;
 @EnableKafka
 @EnableKafkaStreams
 @Slf4j
-public class MikesKafkaConfiguration {
+public class MikesKafkaStreamConfiguration {
 
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     KafkaStreamsConfiguration kStreamsConfig() {
@@ -34,7 +35,9 @@ public class MikesKafkaConfiguration {
     }
 
     @Bean
-    public KStream<String, String> topologyBuilder(StreamsBuilder streamsBuilder) {
+    public KStream<String, String> topologyBuilder(StreamsBuilder streamsBuilder,
+                                                   CreateTopicOnStartupService createTopicOnStartupService) {
+        createTopicOnStartupService.createTopicIfNotExists();
         KStream<String, String> stream = streamsBuilder.stream("mikes-topic",
                 Consumed.with(Serdes.String(), Serdes.String()));
         KStream<String, String> stream1 = stream.mapValues((key, value) -> {
