@@ -1,6 +1,7 @@
 package com.example.apachekafkademo.kafkaservice.stream;
 
 import com.example.apachekafkademo.kafkaservice.adminstuff.CreateTopicOnStartupService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -26,7 +27,8 @@ public class MikesKafkaStreamConfiguration {
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     KafkaStreamsConfiguration kStreamsConfig() {
         Map<String, Object> props = Map.of(
-                APPLICATION_ID_CONFIG, "mikes-streams2",
+                APPLICATION_ID_CONFIG, "mikes-group",
+
                 BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,127.0.0.1:9092",
                 DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName(),
                 DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName()
@@ -36,7 +38,8 @@ public class MikesKafkaStreamConfiguration {
 
     @Bean
     public KStream<String, String> topologyBuilder(StreamsBuilder streamsBuilder,
-                                                   CreateTopicOnStartupService createTopicOnStartupService) {
+                                                   CreateTopicOnStartupService createTopicOnStartupService)
+            throws JsonProcessingException {
         createTopicOnStartupService.createTopicIfNotExists();
         KStream<String, String> stream = streamsBuilder.stream("mikes-topic",
                 Consumed.with(Serdes.String(), Serdes.String()));
